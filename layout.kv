@@ -1,0 +1,748 @@
+#:import get_color_from_hex kivy.utils.get_color_from_hex
+#:import SlideTransition kivy.uix.screenmanager.SlideTransition
+
+
+
+<DatabaseSampleScreen>:
+	on_enter: self.load_form()
+	size_hint: (1,1)
+	dict: {}
+	name: ' '
+	window_name: ''
+	StackLayout:
+		size_hint: (1,1)
+		orientation: 'lr-bt'
+		background_color: 1,1,1,1
+
+
+		StackLayout:
+			size_hint: (0.9,0.05)
+			orientation: 'rl-bt'
+			spacing: 15
+			Button:
+				text: 'Previous'
+				on_press: root.previous()
+				size_hint: (0.17,0.95)
+		StackLayout:
+			size_hint: (1,0.9)
+			orientation: 'rl-bt'
+
+
+			Sld:
+				id: slider
+				background_color: (0,0,0,1)
+				on_value: root.scroll_change(self.value)
+
+			ScrollView:
+				id: scrv
+				size_hint: (0.9,0.9)
+				on_scroll_y: root.slider_change(self.scroll_y)
+				background_color: 1,1,1,1
+				GridLayout:
+					cols: 1 
+					background_color: 1,1,1,1
+					id: form
+					size_hint_y: None
+		StackLayout:
+			size_hint: (0.9,0.05)
+			orientation: 'rl-bt'
+			Label:
+				size_hint: (1,1)
+				color: (0,0,0,1)
+				align: 'center'
+				font_size: '20sp'
+				text: root.window_name
+
+<DatabaseDetailWidget>:
+	size_hint_y: None
+	text: ''
+	color: (0,0,0,1)
+	text_size: self.size
+	valign: 'middle'
+	halign: 'left'
+	
+						
+<DatabaseDetailSubWidget>:
+	size_hint_y: None
+	item: ''
+	subitem: ''
+	BoxLayout:
+		size_hint: (1,1)
+		orientation: 'horizontal'
+		Label:
+			size_hint: (0.7,1)
+			text: root.item
+			color: (0,0,0,1)
+			text_size: self.size
+			valign: 'middle'
+			halign: 'left'
+		Label:
+			size_hint: (0.3,1)
+			text: root.subitem
+			color: (0,0,0,1)
+			text_size: self.size
+			valign: 'middle'
+			halign: 'center'
+		
+
+
+<DatabaseWidget>:
+	size_hint_y: None
+	heading: ''
+	subheading: ''
+	samplekey: ''
+	BoxLayout:
+		orientation: 'horizontal'
+		size_hint: (1,1)
+		BoxLayout:
+			size_hint: (0.9,1)
+			orientation: 'vertical'
+			Label:
+				text: root.heading
+				text_size: self.size
+				valign: 'middle'
+				halign: 'left'
+				font_size: '25sp'
+				size_hint: (1,0.6)
+				color: (0,0,0,1)
+			Label:
+				text_size: self.size
+				valign: 'middle'
+				halign: 'left'
+				text: root.subheading
+				font_size: '15sp'
+				size_hint: (1,0.4)
+				color: (0,0,0,1)
+		BoxLayout:
+			size_hint: (0.1,1)
+			Button:
+				id: viewbut
+				sample: root.samplekey
+				size_hint: (0.4,0.3)
+				text: 'View'
+
+<chek>:
+	size_hint: (1,1)
+	name: 'PH'
+	included: 0
+	BoxLayout:
+		id: checklist
+		Label:
+			id: checklabel
+			text: root.name	
+			color: (0,0,0,1)
+			size_hint: (0.6,1)
+		CheckBox:
+			
+			color: (0,0,0,1)
+			size_hint: (0.4,1)
+			on_active: root.on_chk_active()
+
+
+
+
+
+MainScreen:
+	data1: {}
+	data2: {}
+	BoxLayout:
+		id: mainscreen
+		size_hint:(1,1)
+		orientation: 'horizontal'
+		spacing: 30
+
+		canvas.before:
+			Color:
+				rgba: 1,1,1,1
+			Rectangle:
+				pos: self.pos
+				size: self.size
+		BoxLayout:
+			size_hint: (0.2,1)
+			orientation: 'vertical'
+			canvas.before:
+				Color:
+					rgba: 0,0,0,1
+				Rectangle:
+		            pos: self.pos
+		            size: self.size
+		    BoxLayout:
+			    Button:
+			    	id: lab1
+			    	color: (1,1,1,1)
+			    	size_hint: (1,0.33)
+			    	text: 'New Sample'
+			    	font_size: '20sp'
+			    	background_color: (1,1,1,0)
+			    	on_press: root.start_new_sample(self)
+		    BoxLayout:
+			    Button:
+			    	id: lab2
+			    	color: (1,1,1,1)
+			    	size_hint: (1,0.33)
+			    	font_size: '20sp'
+			    	text: 'Sample Database'
+			    	background_color: (1,1,1,0)
+			    	on_press: root.start_sample_database(self)
+			    	
+			BoxLayout:
+			    Button:
+			    	id: lab3
+			    	color: (1,1,1,1)
+			    	size_hint: (1,0.33)
+			    	font_size: '20sp'
+			    	text: 'Certificates'
+			    	background_color: (1,1,1,0)
+			    	on_press: root.start_certificate(self)
+			    					
+
+		BoxLayout:
+			id: screenmanage
+			size_hint: (0.8,1)
+			canvas.before:
+				Color:
+					rgba: 1,1,1,1
+				Rectangle:
+		            pos: self.pos
+		            size: self.size
+
+
+<DatabaseScreenManagement>:
+	Loading:
+		name: 'loading'
+	DatabaseMainScreen:
+		name: 'databasemainscreen'
+	DatabaseSampleScreen:
+		name: 'databasesamplescreen'
+
+
+<NewSampleScreenManagement>:
+	id: main_panel
+	size_hint: (1,1)
+	database_dict: [{},{}]
+
+	NewSampleScreen:
+		name: 'start'
+
+	NewSampleDetails:
+		name: '1'
+		window_name: 'Sample Details'
+		#dict: {'Client Name':'','Sample Name':'', 'Sample Type': '','Sample ID':'' }
+
+	NewSampleAnalysisSelection:
+		name: '2'
+		window_name: 'Sample Analysis Details'
+
+		
+	NewSampleAnalysisValues:
+		name: '3'
+		window_name: 'Sample Analysis'
+		#dict: {'TDS':'' ,'EC':'' ,'TSS':'' ,'Oil & grease':'' ,'Heavy metalsAs':'' ,'Hg,Pb':'' ,'Nitrates':'' ,'Nitrites':'' ,'Total Phosphorus':'' ,'total Nitrogen':'' ,'Pesticides and Volatile Substances':'' ,'Ammonia-N':'' ,'BOD':'' ,'COD':'' ,'sulphide':'' ,'Zn':'' ,'Cu':'' ,'Se':'' ,'Total Alkalinity':''}
+
+	Billing:
+		name: '4'
+			
+	
+
+
+<Sld>:
+	min: 0
+	max: 1
+	value: 1
+	orientation: 'vertical'
+	step: 0.01
+	size_hint: (0.1,0.9)
+
+<DataField>:
+	BoxLayout:
+		orientation: 'vertical'
+		size_hint:(1,1)
+		Label:
+			id: heading
+			size_hint: (1,0.6)
+			font_size: '15sp'
+
+		Label:
+			id: body
+			size_hint: (1,0.4)
+			font_size: '10sp'
+
+<NewSampleScreen>:	
+	name: 'start'
+	BoxLayout:
+		orientation: 'vertical'
+		canvas.before:
+			Color:
+				rgba: 1,1,1,1
+			Rectangle:
+		        pos: self.pos
+		        size: self.size
+	    Label:
+	    	size_hint: (1,0.8)
+			text: "New Sample"
+			color: (0,0,0,1)
+
+		Button:
+			size_hint: (0.2,0.07)
+			text: "start"
+			on_press: root.start()
+
+
+<SampleData>:
+	on_enter: self.load_form()
+	size_hint: (1,1)
+	dict: {}
+	name: '2'
+	StackLayout:
+		size_hint: (1,1)
+		orientation: 'lr-bt'
+		background_color: 1,1,1,1
+
+
+		StackLayout:
+			size_hint: (0.9,0.07)
+			orientation: 'rl-bt'
+			spacing: 15
+			Button:
+				text: 'Next'
+				on_press: root.next()
+				size_hint: (0.17,0.75)
+				#pos_hint:{'top':1,'right':1}
+			Button:
+				text: 'Previous'
+				on_press: root.previous()
+				size_hint: (0.17,0.85)
+
+		ScrollView:
+			id: scrv
+			size_hint: (0.9,0.9)
+			on_scroll_y: root.slider_change(self.scroll_y)
+			background_color: 1,1,1,1
+			GridLayout:
+				cols: 1 
+				background_color: 1,1,1,1
+				id: form
+				#orientation: 'vertical'
+				size_hint_y: None
+
+		Sld:
+			id: slider
+			background_color: (0,0,0,1)
+			on_value: root.scroll_change(self.value)
+
+		Label:
+			size_hint: (1,0.07)
+			color: (0,0,0,0)
+			text: 'Properties'
+
+
+<NewSampleDetails>:
+	on_enter: self.load_form()
+	size_hint: (1,1)
+	dict: {}
+	name: '2'
+	window_name: ''
+	StackLayout:
+		size_hint: (1,1)
+		orientation: 'lr-bt'
+		background_color: 1,1,1,1
+
+
+		StackLayout:
+			size_hint: (0.9,0.05)
+			orientation: 'rl-bt'
+			spacing: 15
+			Button:
+				text: 'Next'
+				on_press: root.next()
+				size_hint: (0.17,0.95)
+				#pos_hint:{'top':1,'right':1}
+			Button:
+				text: 'Previous'
+				on_press: root.previous()
+				size_hint: (0.17,0.95)
+		StackLayout:
+			size_hint: (1,0.9)
+			orientation: 'rl-bt'
+
+
+			Sld:
+				id: slider
+				background_color: (0,0,0,1)
+				on_value: root.scroll_change(self.value)
+
+			ScrollView:
+				id: scrv
+				size_hint: (0.9,0.9)
+				on_scroll_y: root.slider_change(self.scroll_y)
+				background_color: 1,1,1,1
+				GridLayout:
+					cols: 1 
+					background_color: 1,1,1,1
+					id: form
+					#orientation: 'vertical'
+					size_hint_y: None
+
+		StackLayout:
+			size_hint: (0.9,0.05)
+			orientation: 'rl-bt'
+			Label:
+				size_hint: (1,1)
+				color: (0,0,0,1)
+				align: 'center'
+				font_size: '20sp'
+				text: root.window_name
+
+
+<NewSampleAnalysisValues>:
+	on_enter: self.load_form()
+	size_hint: (1,1)
+	dict: {}
+	name: '4'
+	window_name: ''
+	StackLayout:
+		size_hint: (1,1)
+		orientation: 'lr-bt'
+		background_color: 1,1,1,1
+
+
+		StackLayout:
+			size_hint: (0.9,0.05)
+			orientation: 'rl-bt'
+			spacing: 15
+			Button:
+				text: 'Next'
+				on_press: root.next()
+				size_hint: (0.17,0.95)
+				#pos_hint:{'top':1,'right':1}
+			Button:
+				text: 'Previous'
+				on_press: root.previous()
+				size_hint: (0.17,0.95)
+		StackLayout:
+			size_hint: (1,0.9)
+			orientation: 'rl-bt'
+
+
+			Sld:
+				id: slider
+				background_color: (0,0,0,1)
+				on_value: root.scroll_change(self.value)
+
+			ScrollView:
+				id: scrv
+				size_hint: (0.9,0.9)
+				on_scroll_y: root.slider_change(self.scroll_y)
+				background_color: 1,1,1,1
+				GridLayout:
+					cols: 1 
+					background_color: 1,1,1,1
+					id: form
+					#orientation: 'vertical'
+					size_hint_y: None
+
+		StackLayout:
+			size_hint: (0.9,0.05)
+			orientation: 'rl-bt'
+			Label:
+				size_hint: (1,1)
+				color: (0,0,0,1)
+				align: 'center'
+				font_size: '20sp'
+				text: root.window_name
+
+
+<tests>:
+	BoxLayout:
+		size_hint: (1,1)
+		orientation: 'vertical'
+		Label:
+			id: lab
+			text: 'Full Chemical Analysis: '
+			color: (0,0,0,1)
+			font_size: '20sp'
+			size_hint: (1,0.25)
+			text_size: self.size
+			halign: 'left'
+
+		GridLayout:
+			id: checks
+			cols: 4
+			size_hint: (1,0.75)
+
+
+
+		
+<NewSampleAnalysisSelection>:
+	on_enter: self.load_form()
+	size_hint: (1,1)
+	dict: {}
+	name: ' '
+	window_name: ''
+	StackLayout:
+		size_hint: (1,1)
+		orientation: 'lr-bt'
+		background_color: 1,1,1,1
+
+
+		StackLayout:
+			size_hint: (0.9,0.05)
+			orientation: 'rl-bt'
+			spacing: 15
+			Button:
+				text: 'Next'
+				on_press: root.next()
+				size_hint: (0.17,0.95)
+				#pos_hint:{'top':1,'right':1}
+			Button:
+				text: 'Previous'
+				on_press: root.previous()
+				size_hint: (0.17,0.95)
+		StackLayout:
+			size_hint: (1,0.9)
+			orientation: 'rl-bt'
+
+
+			Sld:
+				id: slider
+				background_color: (0,0,0,1)
+				on_value: root.scroll_change(self.value)
+
+			ScrollView:
+				id: scrv
+				size_hint: (0.9,0.9)
+				on_scroll_y: root.slider_change(self.scroll_y)
+				background_color: 1,1,1,1
+				GridLayout:
+					cols: 1 
+					background_color: 1,1,1,1
+					id: form
+					size_hint_y: None
+
+							
+
+							
+
+		StackLayout:
+			size_hint: (0.9,0.05)
+			orientation: 'rl-bt'
+			Label:
+				size_hint: (1,1)
+				color: (0,0,0,1)
+				align: 'center'
+				font_size: '20sp'
+				text: root.window_name
+
+
+
+<Billing>:
+	on_enter: self.load_form()
+	size_hint: (1,1)
+	dict: {}
+	name: ' '
+	window_name: 'Billing'
+	StackLayout:
+		size_hint: (1,1)
+		orientation: 'lr-bt'
+		background_color: 1,1,1,1
+
+
+		StackLayout:
+			size_hint: (0.9,0.05)
+			orientation: 'rl-bt'
+			spacing: 15
+			Button:
+				text: 'Certificate'
+				on_press: root.generate_certi()
+				size_hint: (0.17,0.95)
+			Button:
+				id: submitbtn
+				text: 'Submit'
+				size_hint: (0.17,0.95)
+				on_press: root.submit()
+			Button:
+				text: 'Previous'
+				#on_press: root.previous()
+				size_hint: (0.17,0.95)
+
+
+
+		StackLayout:
+			size_hint: (1,0.9)
+			orientation: 'rl-bt'
+
+
+			Sld:
+				id: slider
+				background_color: (0,0,0,1)
+				on_value: root.scroll_change(self.value)
+
+			ScrollView:
+				id: scrv
+				size_hint: (0.9,0.85)
+				on_scroll_y: root.slider_change(self.scroll_y)
+				background_color: 1,1,1,1
+				GridLayout:
+					cols: 1 
+					background_color: 1,1,1,1
+					id: form
+					size_hint_y: None
+		
+
+			BoxLayout:
+				orientation: 'horizontal'
+				size_hint: (1,0.05)
+				Label:
+					text: 'Payment Received'
+					color: (0,0,0,1)
+					text_size: self.size
+					halign: 'left'
+					valign: 'middle'
+				Label:
+					text: 'Yes'
+					color: (0,0,0,1)
+					text_size: self.size
+					halign: 'right'
+					valign: 'middle'
+				CheckBox:
+					color: (0,0,0,1)
+				Label:
+					text: 'No'
+					color: (0,0,0,1)
+					text_size: self.size
+					halign: 'right'
+					valign: 'middle'
+				CheckBox:
+					color: (0,0,0,1)
+
+		StackLayout:
+			size_hint: (0.9,0.05)
+			orientation: 'rl-bt'
+			Label:
+				size_hint: (1,1)
+				color: (0,0,0,1)
+				align: 'center'
+				font_size: '20sp'
+				text: root.window_name
+
+
+<DatabaseMainScreen>:
+	on_enter: self.load_form()
+	size_hint: (1,1)
+	dict: {}
+	name: ' '
+	window_name: 'Certificates'
+	StackLayout:
+		size_hint: (1,1)
+		orientation: 'lr-bt'
+		background_color: 1,1,1,1
+
+
+		StackLayout:
+			size_hint: (1,0.9)
+			orientation: 'rl-bt'
+
+
+			Sld:
+				id: slider
+				background_color: (0,0,0,1)
+				on_value: root.scroll_change(self.value)
+
+			ScrollView:
+				id: scrv
+				size_hint: (0.9,0.85)
+				on_scroll_y: root.slider_change(self.scroll_y)
+				background_color: 1,1,1,1
+				GridLayout:
+					cols: 1 
+					background_color: 1,1,1,1
+					id: form
+					size_hint_y: None
+		
+		StackLayout:
+			size_hint: (0.9,0.05)
+			orientation: 'rl-bt'
+			Label:
+				size_hint: (1,1)
+				color: (0,0,0,1)
+				align: 'center'
+				font_size: '20sp'
+				text: root.window_name
+
+<PriceTag>:
+	BoxLayout:
+		size_hint: (1,1)
+		orientation: 'horizontal'
+		Label:
+			id: test_name
+			text: ''
+			size_hint: (0.8,1)
+			color: (0,0,0,1)
+			text_size: self.size
+			halign: 'left'
+			valign: 'middle'
+		Label:
+			id: price
+			text: ''
+			color: (0,0,0,1)
+			size_hint: (0.2,1)
+			halign: 'left'
+			valign: 'middle'
+
+<Field>:
+	label_name: 'Sample ID'
+	sam_id: ''
+	BoxLayout:	
+		size_hint_y: None
+		height: 110
+		orientation: 'vertical'
+		spacing: 10
+		canvas.before:
+			Color:
+				rgba: 1,1,1,1
+			Rectangle:
+	            pos: self.pos
+	            size: self.size
+
+	    Label:
+	    	id: field_name
+	    	color: 0,0,0,1
+	    	size_hint: (0.8,0.7)
+	    	text: root.label_name
+	    	font_size: '17sp'
+	    	text_size: self.size
+	    	halign: 'left'
+
+	    TextInput:
+	    	id: field_input
+	    	size_hint: (0.3,0.3)
+	    	background_color: 0,0,0,0
+	    	text: ''
+	    	foreground_color: (0,0,0)
+	    	canvas.before:
+				Color:
+					rgba: 0,0,0,0.25
+				Line:
+					width: 0.4
+					rounded_rectangle:(self.x, self.y, self.width, self.height, 4)
+
+			
+<Loading>:
+	name: 'loading'
+	BoxLayout:
+		size_hint: (1,1)
+		canvas.before:
+			Color:
+				rgba: 1,1,1,1
+			Rectangle:
+				size: self.size
+				pos: self.pos
+		Label:
+			text: 'Loading'
+			font_size: '40sp'
+			color: (0,0,0,1)
+			     
+	
+
+
+
