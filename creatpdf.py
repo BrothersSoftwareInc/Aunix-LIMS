@@ -1,4 +1,4 @@
-from fpdf impot FPDF
+from fpdf import FPDF
 
 serial_data=['SERIAL NO: 2 Sample No..................0431/17-18........................','Name of customer KSAIL Address.....','Purpose of sampling: Assessment of effluent composition County: Kisumu','Date Sampled.......08/06/2018............Date Received.....................08/06/2018........................','Source............... Kibos distillery (B).........Date compiled.............25/06/2018.......................']
 analysis_values = [['PARAMETERS','UNIT','RESULTS','WHO STANDARDS','KEBS STANDARDS'],['PH','pH Scale','5.8','6.5-8.5','6-9'],['PH','pH Scale','5.8','6.5-8.5','6-9'],['PH','pH Scale','5.8','6.5-8.5','6-9'],['PH','pH Scale','5.8','6.5-8.5','6-9']]
